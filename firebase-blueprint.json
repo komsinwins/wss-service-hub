@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "ServiceJob": {
+      "title": "ServiceJob",
+      "description": "Onsite service job record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "jobNo": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "customerAddress": { "type": "string" },
+        "jobType": { "type": "string" },
+        "startDate": { "type": "string" },
+        "startTime": { "type": "string" },
+        "endDate": { "type": "string" },
+        "endTime": { "type": "string" },
+        "details": { "type": "string" },
+        "technicianName": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "completed", "cancelled"] },
+        "notes": { "type": "string" },
+        "imageBefore": { "type": "string" },
+        "imageDuring": { "type": "string" },
+        "imageAfter": { "type": "string" },
+        "jobImages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "jobNo", "customerName", "jobType", "startDate", "startTime", "endDate", "endTime", "technicianName", "status", "createdAt"]
+    },
+    "OnCallService": {
+      "title": "OnCallService",
+      "description": "Telephone on-call service record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "callNo": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "issue": { "type": "string" },
+        "solution": { "type": "string" },
+        "callDate": { "type": "string" },
+        "callTime": { "type": "string" },
+        "receiverName": { "type": "string" },
+        "status": { "type": "string", "enum": ["resolved", "pending", "forwarded"] },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "callNo", "customerName", "issue", "callDate", "callTime", "receiverName", "status", "createdAt"]
+    },
+    "ClaimProduct": {
+      "title": "ClaimProduct",
+      "description": "Product claim record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "claimNo": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "productName": { "type": "string" },
+        "productType": { "type": "string" },
+        "productBrand": { "type": "string" },
+        "serialNumber": { "type": "string" },
+        "symptom": { "type": "string" },
+        "claimDate": { "type": "string" },
+        "returnDate": { "type": "string" },
+        "technicianName": { "type": "string" },
+        "status": { "type": "string", "enum": ["received", "checking", "repairing", "completed", "rejected"] },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "claimNo", "customerName", "productName", "symptom", "claimDate", "technicianName", "status", "createdAt"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customer record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "company": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name", "createdAt"]
+    }
+  },
+  "firestore": {
+    "jobs/{jobId}": {
+      "schema": "ServiceJob",
+      "description": "Collection of service job records"
+    },
+    "oncallservice/{id}": {
+      "schema": "OnCallService",
+      "description": "Collection of telephone service on-call records"
+    },
+    "claim/{id}": {
+      "schema": "ClaimProduct",
+      "description": "Collection of product claim records"
+    },
+    "customers/{id}": {
+      "schema": "Customer",
+      "description": "Collection of customer records"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /jobs/{jobId} {
+      allow read: if true;
+      allow delete: if true;
+      allow create, update: if isValidJob(request.resource.data);
+    }
+
+    match /oncallservice/{id} {
+      allow read: if true;
+      allow delete: if true;
+      allow create, update: if isValidOnCall(request.resource.data);
+    }
+
+    match /claim/{id} {
+      allow read: if true;
+      allow delete: if true;
+      allow create, update: if isValidClaim(request.resource.data);
+    }
+
+    match /customers/{id} {
+      allow read: if true;
+      allow delete: if true;
+      allow create, update: if isValidCustomer(request.resource.data);
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidCustomer(customer) {
+      return customer.id is string && customer.id.size() <= 100
+        && customer.name is string && customer.name.size() <= 200
+        && customer.createdAt is string && customer.createdAt.size() <= 50;
+    }
+
+    function isValidOnCall(oncall) {
+      return oncall.id is string && oncall.id.size() <= 100
+        && oncall.callNo is string && oncall.callNo.size() <= 100
+        && oncall.customerName is string && oncall.customerName.size() <= 200
+        && oncall.issue is string
+        && oncall.callDate is string && oncall.callDate.size() <= 20
+        && oncall.callTime is string && oncall.callTime.size() <= 20
+        && oncall.receiverName is string && oncall.receiverName.size() <= 200
+        && oncall.status is string && (oncall.status == 'resolved' || oncall.status == 'pending' || oncall.status == 'forwarded')
+        && oncall.createdAt is string && oncall.createdAt.size() <= 50;
+    }
+
+    function isValidClaim(claim) {
+      return claim.id is string && claim.id.size() <= 100
+        && claim.claimNo is string && claim.claimNo.size() <= 100
+        && claim.customerName is string && claim.customerName.size() <= 200
+        && claim.productName is string && claim.productName.size() <= 200
+        && claim.symptom is string
+        && claim.claimDate is string && claim.claimDate.size() <= 20
+        && claim.technicianName is string && claim.technicianName.size() <= 200
+        && claim.status is string && (claim.status == 'received' || claim.status == 'checking' || claim.status == 'repairing' || claim.status == 'completed' || claim.status == 'rejected')
+        && claim.createdAt is string && claim.createdAt.size() <= 50;
+    }
+
+    function isValidJob(job) {
+      return job.id is string && job.id.size() <= 100
+        && job.jobNo is string && job.jobNo.size() <= 100
+        && job.customerName is string && job.customerName.size() <= 200
+        && job.jobType is string && job.jobType.size() <= 200
+        && job.startDate is string && job.startDate.size() <= 20
+        && job.startTime is string && job.startTime.size() <= 20
+        && job.endDate is string && job.endDate.size() <= 20
+        && job.endTime is string && job.endTime.size() <= 20
+        && job.technicianName is string && job.technicianName.size() <= 200
+        && job.status is string && (job.status == 'pending' || job.status == 'in_progress' || job.status == 'completed' || job.status == 'cancelled')
+        && job.createdAt is string && job.createdAt.size() <= 50;
+    }
+  }
+}

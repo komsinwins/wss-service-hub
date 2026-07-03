@@ -1,0 +1,6 @@
+{
+  "name": "Onsite Service Tracker",
+  "description": "ระบบบันทึกรายละเอียดงานและเวลาสำหรับการบริการนอกสถานที่ (Onsite Service) พร้อมสรุปเวลาทำงาน สถิติรายเดือน และออกใบงาน PDF",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
